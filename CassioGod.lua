@@ -62,15 +62,15 @@ DelayAction(function()
 end, 1)
 
 OnProcessSpellComplete(function(Object,spellProc)
-    if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_R) then
-      if CHANELLING_SPELLS[spell.name] then
-        if IsFacing(unit,850) and ValidTarget(unit, 850) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and CassiopeiaMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() then 
-        Cast(_R,unit)
+    if GetObjectType(Object) == Obj_AI_Hero and GetTeam(Object) ~= GetTeam(myHero) and IsReady(_R) then
+      if CHANELLING_SPELLS[spellProc.name] then
+        if IsFacing(Object,850) and ValidTarget(Object, 850) and GetObjectName(Object) == CHANELLING_SPELLS[spellProc.name].Name and CassiopeiaMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() then 
+        Cast(_R,Object)
         end
       end
     end
     
-    if unit == myHero and spell.name == "CassiopeiaTwinFang" then
+    if Object == myHero and spellProc.name == "CassiopeiaTwinFang" then
     lastE = GetTickCount()
     end
 end)
@@ -225,14 +225,14 @@ end)
 
 local poisoned = {}
 
-OnUpdateBuff(function(unit,buff)
-  if GetTeam(unit) ~= GetTeam(myHero) and buff.Name:find("poison") then
-  poisoned[GetNetworkID(unit)] = buff.Count
+OnUpdateBuff(function(Object,buffProc)
+if GetTeam(Object) ~= GetTeam(myHero) and buffProc.Name:find("poison") then
+poisoned[GetNetworkID(unit)] = buffProc.Count
   end
 end)
 
-OnRemoveBuff(function(unit,buff)
-  if GetTeam(unit) ~= GetTeam(myHero) and buff.Name:find("poison") then
+OnRemoveBuff(function(Object,BuffName)
+  if GetTeam(Object) ~= GetTeam(myHero) and BuffName.Name:find("poison") then
   poisoned[GetNetworkID(unit)] = 0
   end
 end)
