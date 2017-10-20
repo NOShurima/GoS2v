@@ -1,4 +1,4 @@
-if GetObjectName(GetMyHero()) ~= "Cassiopeia" then return end
+if Object == GetMyHero()) ~= "Cassiopeia" then return end
 
 require('Inspired')
 require('DeftLib')
@@ -64,7 +64,7 @@ end, 1)
 OnProcessSpellComplete(function(Object,spellProc)
     if GetObjectType(Object) == Obj_AI_Hero and GetTeam(Object) ~= GetTeam(myHero) and IsReady(_R) then
       if CHANELLING_SPELLS[spellProc.name] then
-        if IsFacing(Object,850) and ValidTarget(Object, 850) and GetObjectName(Object) == CHANELLING_SPELLS[spellProc.name].Name and CassiopeiaMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() then 
+        if IsFacing(Object,850) and ValidTarget(Object, 850) and GetObjectName(Object) == CHANELLING_SPELLS[spellProc.name].Name and CassiopeiaMenu.Interrupt[GetObjectName(Object).."Inter"]:Value() then 
         Cast(_R,Object)
         end
       end
@@ -74,6 +74,44 @@ OnProcessSpellComplete(function(Object,spellProc)
     lastE = GetTickCount()
     end
 end)
+
+OnAnimation(function(unit, animation)
+    if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_W) then
+        if CHANELLING_SPELLS[animation.name] then
+          if IsFacing(unit,850) and ValidTarget(unit, 850) and GetObjectName(unit) == CHANELLING_SPELLS[animation.name].Name and CassiopeiaMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() then 
+          Cast(_W,unit)
+          end
+        end
+      end
+      if unit == myHero and spell.name == "CassiopeiaTwinFang" then
+        lastE = GetTickCount()
+        end
+    end)
+OnProcessSpellAttack(function(unit, spell)
+    if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_W) then
+        if CHANELLING_SPELLS[spell.name] then
+          if IsFacing(unit,850) and ValidTarget(unit, 850) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and CassiopeiaMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() then 
+          Cast(_W,unit)
+          end
+        end
+      end
+      if unit == myHero and spell.name == "CassiopeiaTwinFang" then
+        lastE = GetTickCount()
+        end
+    end)
+OnProcessWaypoint(function(unit, waypoint)
+    if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_W) then
+        if CHANELLING_SPELLS[waypoint.name] then
+          if IsFacing(unit,850) and ValidTarget(unit, 850) and GetObjectName(unit) == CHANELLING_SPELLS[waypoint.name].Name and CassiopeiaMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() then 
+          Cast(_W,unit)
+          end
+        end
+      end
+      if unit == myHero and waypoint.name == "CassiopeiaTwinFang" then
+        lastE = GetTickCount()
+        end
+    end)
+
 
 OnDraw(function(myHero)
 local pos = GetOrigin(myHero)
@@ -225,14 +263,14 @@ end)
 
 local poisoned = {}
 
-OnUpdateBuff(function(Object,buffProc)
-if GetTeam(Object) ~= GetTeam(myHero) and buffProc.Name:find("poison") then
-poisoned[GetNetworkID(unit)] = buffProc.Count
+OnUpdateBuff(function(unit, buff)
+if GetTeam(unit) ~= GetTeam(myHero) and buff.Name:find("poison") then
+poisoned[GetNetworkID(unit)] = buff.Count
   end
 end)
 
-OnRemoveBuff(function(Object,BuffName)
-  if GetTeam(Object) ~= GetTeam(myHero) and BuffName.Name:find("poison") then
+OnRemoveBuff(function(unit, buff)
+  if GetTeam(unit) ~= GetTeam(myHero) and buff.Name:find("poison") then
   poisoned[GetNetworkID(unit)] = 0
   end
 end)
